@@ -1,0 +1,303 @@
+Building from the Ground Up in Mapbox Studio
+How I Designed a Red Dead Redemption 2 Inspired Map
+Lee Martin
+Lee Martin
+
+·
+Follow
+
+31 min read
+·
+5 days ago
+5
+
+
+
+
+
+
+
+This is a project I did with Mapbox back in 2018 while we were all playing Red Dead Redemption 2 for the first time. This rather lengthy how-to blog was always hidden away on mapbox.com but the link has been dead for years. So, I’ve gone ahead and reposted it here for archival purposes along with a working link to the map. Note: Mapbox Studio has evolved since I wrote this so some things may have changed technically but the approach stays the same. I hope you enjoy. — Lee Martin
+
+Like millions of others, I have been enjoying Rockstar Game’s latest installment in the Red Dead Redemption series: Red Dead Redemption 2. Apart from the deep narrative, incredible visuals, and deadeye gameplay, I was struck by all the energy put into the user interface and in particular the game map. Rockstar’s fictional United States spans five states and many major cities including one inspired by my home: New Orleans (or in the game, Saint Denis.) Being an avid fan of Mapbox and an amateur at their Studio product, I thought it would be fun to redesign the actual world map in the style of the game map. Herein lies a very in depth tutorial on my design journey.
+
+Explore the map and read on to find out how it was done.
+
+Preparation
+Setup
+By far the hardest part of building this map, is simply that you have to take a break from this incredible game. However, it helps to have it running in the background so you can explore the map in game or from the companion iPad app. It was helpful for me to use this app to take screenshots and really understand how the map fidelity changes as the user zooms in and out. Another piece of advice is to try not to explore too much while you’re building the map and rather focus on each task. Maps, by nature, are fun to explore and I found myself using up a lot of my time simply typing in random locations.
+
+Colors
+
+One of the first things I did was recreate the game map’s color palette in my favorite design tool, Figma. To do this, I simply used the eyedropper tool to sample some colors from a series of game screenshots. If you don’t count things like red routes and yellow mission circles, there are really only five colors on the permanent map. Take note of these because we’ll be using them a lot later.
+
+Land #DEC29B — The base of the map is a canvas color
+Ink #40423D — The next prominent color is a dark black ink color
+Water #9E9985 — Water is somewhere between ink and canvas with a hint of blue/green
+Contours #C8B28D — The contour lines and fills look like stains on the canvas
+Pencil #716454 — The viewpoints on the map are printed in a burnt tone
+With your color palette built, it’s time to dig into typography.
+
+Typography
+
+The game map uses several different typefaces to label places of interest from massive slab serifs to handwritten cursive. Rather than spending a single dime on paid fonts, I headed over to Google Fonts and quickly found decent alternatives to each type. Here’s the breakdown:
+
+State Names — Merriweather Black
+City Names — Raleway Black
+Major Bodies of Water — Noto Serif
+Minor Bodies of Water and Rivers — Crimson Text Bold Italic
+Station Names — Raleway Black
+Natural Features — Chau Philomene One Italic
+Viewpoints — Homemade Apple
+Forts — Lato Black
+Go ahead and grab those typefaces or any better alternative you find from Google Fonts. We’ll load them into Mapbox Studio soon.
+
+Iconography
+
+I turned to the Mapbox Maki Icon editor in order to recreate the game map’s icon set by simply setting their background to black, foreground color to white, and making them round. I then referenced the OpenStreetMap tags Mapbox makes available to build out a list of alternate categories. The final list of RDR2 places and their equivalent Mapbox place type looks something like this.
+
+Bait Shop — Aquarium
+Barber — Hairdresser
+Butcher — Butcher
+Doctor — Doctor, Hospital
+General Store — General
+Hotel
+Photo Studio
+Post Office
+Saloon — Bar
+Show — Cinema, Theater
+Stable — Bicycle Rental
+Stagecoach — Bus Station
+Tailor — Clothes
+Trapper — Fabric
+Once you’re happy with your icon set, you can download them from the editor as one zip.
+
+Scale
+It’s helpful to wrap your head around the difference in scale between the world map and the game map as Mapbox will allow you to style every one of 22! different zoom scales. By comparing the geographical sizing of an area of similar size, I estimated that the Red Dead Redemption Map starts around 11 and goes up to 18 or so. So, if you zoom out to 11, your map features should have similar sizing. Conversely, if you zoom into 18, features should be of similar sizing to a completely zoomed in RDR2 map.
+
+Mapbox Studio
+
+Start Blank
+I like building up my map from a blank canvas rather than using an existing template so I don’t get overwhelmed with layers and rather try to make the exact decisions necessary to recreate the style. In order to create a new blank map, head to Studio and click the “Pick a template of upload a style” button. This will bring up a new dialogue which includes a “Start Blank” button you can click to create a new blank map.
+
+Interface
+I think the Mapbox Studio interface is pretty intuitive and certainly easier to use than the item selector in RDR2. The left panel will include all of the graphical layers you’ll create similar to a layer panel in Figma or Photoshop. The open area on the right will display your map as it is designed. The top right corner includes another set of useful features and indicators including the map’s current zoom level and position. In addition, it includes a search box that allows you to quickly jump around to different locations around the world thanks to Mapbox’s geocoding technology.
+
+Upload Assets
+Click on the “Fonts” button in the top right corner (or press t on your keyboard) to bring up your account fonts. From here you can click the “Upload new font” button in order to upload each of the fonts you downloaded from Google Fonts into your account. Next click on the “Images” button (or press i) to bring up your images manager and you can then upload your Maki icon set.
+
+Finally, let’s click the background layer in the left panel and click the trash icon (or press ⌘ + Delete) to delete the layer so we really have a blank map to start with. It’s now time to design our map.
+
+Land and Water
+Land
+
+Every feature on our map begins as a new layer in Mapbox Studio. Let’s recreate our first layer (the background layer) by clicking the “Add layer” button or simply pressing n on your keyboard. When a new layer is created, Mapbox immediately opens that layers data source selection screen. We will be doing amazing things in this tab later but for now select “Background layer” as the source and then click “Create background layer.” Mapbox will then jump to the style tab of the layer panel which will allow us to adjust the aesthetic of our layer. In the case of our land layer, let’s simply change the hex color to be the same as our land palette color. Finally, we can hover over the name background on this panel and click to edit it. Let’s call it “Land.”
+
+Good job creating your first layer. Yes it’s bare but let’s pretend it is a completely unexplored map at the moment.
+
+Water
+
+Fill
+As someone who actually grew up down the bayou, I love how RDR2 handles water and makes it another crucial part of your exploration. Let’s add some water to our map by creating another new layer. Again, this will redirect you to our new layer’s data source tab. Instead of choosing background layer again, open “Mapbox Streets v7” in the active sources and click the “water” source. Make sure your map is completely zoomed out (you can use your mousewheel) and you should see green everywhere there is water in our world. Mapbox provides this sort of blueprint view of all of their data to help you understand what features will be visible depending on your source and filtering selections. We’ll take a closer look at this later. For now, you can click “Style” at the top of the layer panel to jump to the styling tab. From here, we can change the color of our water to reflect what we decided on earlier. I think that you’ll agree that this one simple addition almost immediately allows our app to begin to reflect some of that RDR2 map aesthetic. Now you may think that the next logical step is to simply style the 1px stroke provided by this same map layer but we’ll want to do something a bit more sophisticated. Namely, we’re going to style our water outlines to resize themselves depending on the current zoom level. For this, we’ll need to create another layer for the water outlines. Before that, let’s go ahead and make the 1px stroke transparent by setting the color’s alpha property to zero. Finally, let’s rename this layer “Water Fill.”
+
+Line
+Click on “Add layer” and again select “water” from the “Mapbox Streets v7” source. In the left column of the data tab, you’ll see a list of additional features including Type, Filter, and Zoom extent. Click Type and change the type to Line. You will then see our blueprint of visible features turn into a line around the water. Yes, this is awesome. Let’s jump over to the styling tab. First, let’s change the color of our line to be the ink color from our palette. Now a 1px ink colored line is fine but wouldn’t it be nice if the width of our line grew in size as we zoomed into our map like it does on the RDR2 map? Let’s do that. In the same style tab, click “Width” in the left column. From here you’ll see the default width of 1px and a couple of additional options:
+
+Style across zoom range
+Style across data range
+Style with data conditions
+Use a formula
+You’re beginning to realize just how powerful this tool is right? Let’s click “Style across zoom range.” Mapbox Studio allows you to style pretty much anything based on the map’s current zoom level. In the case of our water lines, we would like them to grow in size as our map’s zoom level increases. A definition of style at zoom level is called a “stop” and by default Mapbox provides a stop for the highest and lowest levels (0 and 22.) As we discussed earlier in the “Scale” section, we’re going to be focused on zoom levels that more closely represent that of the RDR2 map. Now what I did to achieve this is not scientific at all, I simply zoomed in and out of the game map to decide when water lines should appear and the general sizing of the line depending on the zoom level. Let’s adjust the first stop’s zoom level from 0 to 15. You can leave the line width at 1px. Let’s then click the 2nd stop. You can leave the zoom level at 22 but we’ll want to adjust the line width to be 36px. Zooming in and out near a coast line will show that this looks pretty good but we can do better. Right above the two stop’s you just adjusted is another feature called “Rate of change.” Let’s change our rate of change from linear to exponential and set the base to 1.3. You just created your first dynamically sized line. Nice one! One more thing. By default our water lines are joined by sharp angled corners. Wouldn’t it be nice if these could be more rounded like the RDR2 map? Well click “Join” in the left column and then choose the “Round” line join option. That should smooth things out a bit. Let’s rename this layer “Water Line.”
+
+Since we now have two layers for our water, let’s group them in a folder in the layers panel. To do this, simply click the Water Fill layer and then shift-click to also select the Water Line layer. From here you can click the little folder icon or simple press g on your keyboard to group your water layers. Finally, if you highlight the new Group at the top of the stack, you should see a pencil you can click to rename the group to “Water.”
+
+If you made it this far, be proud of yourself. You’ve already learned one of the most powerful features of Mapbox Studio and we’ll make good use of zoom level based styling in the sections to come. This is also a good time to mention that it helped me a lot to focus on one small area while designing this map rather than jumping all over the world and getting lost in exploration. A good choice is a nice city park like beautiful Stanley Park in Vancouver. Simply search “Stanley Park” in the top right corner to jump to that location or try one that has a nice mix of features.
+
+Contours
+Line
+
+Another key feature of the RDR2 map is its use of contour lines to give you an idea of what sort of topography you can expect from different regions of the map. Can Mapbox recreate this feature? Of course it can! Let’s add another new layer and select “Mapbox Terrain V2” in unused sources to select the “contour” data source. Then change the Type to Line just like you did with the Water Line layer. The blueprint view should now show green outlines that follow the contours of the earth. This really is a beautiful way to represent the slopes and valleys of our planet.
+
+Let’s jump to “Style” for this layer to adjust the color and width to our contour lines. First, simply adjust the hex color by using the appropriate swatch from our palette. Then, we’ll want to again style the line width according to the zoom level. Our first stop will be at the zoom level 13 with a line width of 1px. Our second stop will be at the zoom level of 22 with a line width of 36px. We’ll again adjust the line to use exponential sizing and in this instance change the base to 1.4. Finally, let’s rename this layer to “Contour Line.”
+
+Fill
+
+In addition to contour lines, the game map includes an indication of steeper changes by using simple hill shading. We can mimic this effect in Mapbox Studio also. Add another layer and again select “Mapbox Terrain V2” from the sources section. Instead of choosing “contour” again, we’ll instead select “hillshade.” Now hillshade will provide polygons that include features of several different levels. I decided to filter this layer to only include highlights at the highest levels. In order to filter the data, we’ll click “Filter” in the left column within our new layer’s panel. From here we’ll click “Add filter” and choose “class” from the available fields. Studio will then ask us which class we’d like to show. Click “Empty” in the class selection dialogue and then click “highlight” in the list of filters. Next, let’s add another filter to only show highlights of a certain level. Click “Add filter” again and choose “level.” From here, you can click the dropdown which says “Is any of” to change the operator to “is greater than or equal to.” You can then click “Empty” again and select the filter of 90. Well done. You just created your first layer filter.
+
+Styling for this layer couldn’t be any easier, simply change the color to the same one you used for your contour lines. This will allow the hills to blend into the contour lines the same way it does on the RDR2 map. Let’s again rename this layer “Contour Fill” and then group it along with “Contour Line” to create a new group called, you guessed it, “Contour.”
+
+Now you might notice a bit of clashing between the water outlines and contour lines. This is because the water lines should appear above the contour lines to look best. In addition to organizing our layers, the layer panel also provides a built in hierarchy that simply stacks layers on top of each other from the bottom most layer to the top most layer. So, in order to make the Water group appear above the Contour group, we simply click and drag the Water group on top. Let’s do this and we’ll be ready to move onto more lines!
+
+Paths, Roads, and Borders
+From what I can tell, the RDR2 map consists of a few different line types: major roads, minor roads, paths (or trails), state borders, and railway lines. Let’s first look at these roads, paths, and borders as we can build off of our zoom level styling work.
+
+Major Roads
+
+Thinking graphically, a highway line is about 3 times the width of the water line we declared earlier and also the same ink color. It helps to use these simple measurements as we continue to pile more layers onto our map. Let’s again add a new layer and choose “road” from the “Mapbox Streets v7” data source. Mapbox will immediately highlight every single road in the world but let’s filter this down to motorways only. Click “Filter,” “Add filter,” and choose “class” as the filter field. Then click “Empty” and select “motorway” as the filter. If you’re still looking at Stanley Park, you will not see a visible line because there is no Interstate running through the park. :D Simply zoom out to find the nearest motorway to the north. Once you do, let’s jump over to styling. Again, we’ll make the line our map’s ink color. We’ll then create two stops. The first at the zoom level of 13 with a line width of 1px and the second at zoom level 22 with a line width of 72px. Again, we’ll set an exponential rate of change with a base of 1.4. Finally, let’s call this layer “Major Roads.”
+
+Minor Roads
+
+Minor roads are about twice as wide as our water lines but again use the same ink color. We’ll add the same “road” data source as the “Major Roads” layer but this time add more filtering to bring in additional road types. Click “Filter,” “Add filter,” and choose “class” once again. Then click “Empty” once again and choose the “motorway_link” filter. Then instead of leaving this dialogue, we’ll click “Add new filter value” and select “primary.” Repeat this step until “secondary,” “street,” “tertiary,” and “trunk” are added to the list of filters. This will make a nice set of minor roads visible on our map. Let’s get this layer styled also. First, change the color to Ink again. Then your width should be:
+
+Zoom 13, line width: 1px
+Zoom 22, line width: 48px
+Exponential Change, base: 1.4
+Let’s make sure the join for our minor and major roads are round like our “Water Line” and then rename this layer to “Minor Roads.” Now let’s learn about dashed paths while adding trails to our map.
+
+Paths
+
+The RDR2 map includes dashed lines that represent walking paths and trails. We can add this in a similar fashion to previous lines with one addition to styling. You know the drill: “Add layer,” select “Mapbox Streets v7,” choose “road,” and then click “Filter.” From here, we’ll filter by the class “path” this time. Jump back over to styling and turn the color Ink once again. Nice one. Round out that join and then set up your line width to the following zoom styling:
+
+Zoom 15, line width: 1px
+Zoom 22, line width: 24px
+Exponential change, base: 1.4
+Now in the same left column you find color and width, you’ll see a function called “Dash array” which allows you to declare sizes for dashes (and gaps between those dashes.) Click this to begin adjusting the line’s dash array. Click “Add dash with gap” and set the dash to 3 and the gap to 4. Pretty cool, right? If you zoom in, you’ll notice our path dashes are very square even though they are round in the game. Well, we can adjust this also. :muscle: Similar to joins, Studio will allow us to adjust the caps of lines which by default are squared off. Click “Cap” in the left column and choose “round” as your cap type. Let then rename this layer “Paths.”
+
+Borders
+
+The thickest line on the game map represents the borders between each major area of the map. I like to think that RDR2 wanted these to represent state borders so let’s style that data source in Studio as well. In addition to begin thicker than the lines we’ve already added, the border lines include a rather interesting dash array which we can achieve by evolving on the “Path” work we just did. First add a new layer and choose the “admin” data source from “Mapbox Streets v7.” You may need to zoom out to see the lines that become visible as this will only major borders. When you do that, you might notice that in addition to lines between states, we’ll also see lines representing maritime borders. To have our border lines end abruptly when they run into the water like on the game map, let’s filter maritime borders off. Click “Filter,” “Add filter,” and “maritime” as your filter field. Then click “Empty” and set the filter to 0 to hide the maritime lines. Nice work, now let’s style it.
+
+First things first, you guessed it: turn that line Ink colored. Let’s then set up our border’s width to be styled across a zoom range like before. Here’s the parameters that work nicely:
+
+Zoom 6, line width: 1px
+Zoom 22, line width: 144px
+Exponential change, base: 1.4
+Very nice. Now just round off both the “Join” and “Cap.” We can now add a dash array which is similar to the game’s map. If you look at the game map, you’ll see that the line is solid and then there is a gap, dash, gap, dash, gap of equal spacing. Let’s setup our dash array exactly that way. Click “Dash Array” and set the first dash to 10 and the gap to 1. Then click the handy “Add dash” button and set it as 1. Repeat this for another gap, dash, and gap. Setting them all to 1. That’s it! Rename this layer to “Border” and pat yourself on the back for unlocking a rare achievement: Dash Arrays.
+
+Since our roads and borders are very similar, let’s group all of these in a group called “Lines.” Congratulations, this is really starting to feel like the game map. While I’m tempted to jump straight to the Railways work with you since it is similar to roads and borders, let’s quickly add some buildings first.
+
+Buildings
+
+The buildings on the game map couldn’t be simpler. They have a stroke that’s identical in width to our path lines (and also the same ink color.) In addition they have a fill which is the same as the contour color. Similar to water, we’ll want to break buildings into two layers (fill and lines) so we have better control over the stroke width. Let’s start by adding the fill since it should appear under the stroke.
+
+Fill
+Add a new layer and select the data “building” from the “Mapbox Streets v7” source. Jump over to Style and change the color to be the same as our contour color. Rename this layer to “Building Fill” and you’re done.
+
+Line
+Go ahead duplicate the “Building Fill” layer by select it and clicking the duplicate button or pressing d on your keyboard. Click the new layer and rename it “Building Line” then click “Select data” to bring up the data source selection for this layer. Our data source is still right because we’re still styling a building but we’ll want to change the Type from “Fill” to “Line” so we’re styling the lines instead. Once you’ve changed that, jump back to the Style tab. First, change the color of the line to Ink. Then, set up the same zoom range styling as “Path” for the width:
+
+Zoom 15, line width: 1px
+Zoom 22, line width: 24px
+Exponential change, base: 1.4
+Make sure that join is rounded and take pride in all the buildings around the world you just built. Finally, group both building layers in a new group called “Buildings.” Now let’s add our rail system.
+
+Railways
+
+Railways are a great way to get around in the game (and real life.) I still think about taking the Rocky Mountaineer from Vancouver to Whistler a few years back. It was incredible and I spent the whole ride hanging off a viewing platform enjoying views of Howe Sound. The railways on the game map consist of three elements. First there is the overall line which is the same width as a major road. Next comes a series of dots along the path which are the same color as our Land. Finally, each station has a donut shaped ring around it. Let’s create each of these in studio. Search the following coordinates to position the map near the station I stepped out of in Whistler: -122.994,50.096.
+
+Line
+Add a new layer and select “road” from “Mapbox Streets v7” as the data source. Then filter this data source by class of “major_rail” to only show major railway lines. The style of this line is similar to that of a major roadway so let’s just copy what we have there. Turn the line an Ink color and create the following zoom styling for width:
+
+Zoom 13, line width: 1px
+Zoom 22, line width: 72px
+Exponential change, base: 1.4
+Finally, set the “Join” to round and rename the layer “Railway Line.”
+
+Dots
+Duplicate the “Railway Line” and rename it “Railway Dot” then click “Select data” to navigate to the layer’s data source selector. Instead of a “Line” “Type,” let’s change to “Circle.” Mapbox will warn you that this change will drop any previous styling for this layer which is okay because this is a new layer. Click “Okay.” If you’re still positioned around the Whistler station, you should see a series of green dots following the path of the railway line. Let’s style these. Head over to styling and change the color to be the same as the land. This is our first “Circle” layer but it works the same ways as fills or lines. We’re going to simply use zoom styling to adjust the size of our circle radius so it fits nicely within our railway line. Setup the following zoom styling for your “Radius:”
+
+Zoom 15, line width: 1px
+Zoom 22, line width: 28px
+Exponential change, base: 1.3
+Nice work. You just conquered circles, no problem.
+
+Stations
+Add a new layer and select “rail_station_label” from “Mapbox Streets v7” as the data source. You should see a single green dot light up for the Whistler station. Let’s style it. First, we’ll give it a similar styling to the “Railway Dot” layer and then we’ll add a zoom styling for it’s stroke width. Let’s start by adjusting the color to be our land color and adding the same “Radius” zoom styling as the railway dots. You can quickly add an existing layer’s styling by choosing “Apply existing value,” filtering by the name of the desired layer, and selecting the style. Once you’ve done that, you can change the “Stroke Color” to be our Ink color. Finally, let’s add some zoom styling for the “Stroke Width” property so it creates a responsive donut around our circle. These values should work nicely:
+
+Zoom 15, line width: 1px
+Zoom 22, line width: 64px
+Exponential change, base: 1.3
+Rename this layer “Railway Station” and group all of your railway layers into a new group called “Railway.” Well done. Your world is now connected with an RDR2 inspired railway. You’re a regular Leviticus Cornwall.
+
+Typography
+As covered earlier in the “Prepare” section, the RDR2 map uses over 8 different typefaces to label everything from cities and rivers to natural features and famous forts. Luckily, Mapbox Studio has data sources that cover all of these subjects. In order to add these labels to our map, we must simple choose the correct data source, set our layer type to “Symbol,” “Filter” accordingly, and then style. Let’s start with major city names.
+
+Cities
+
+The game map has a few major cities which are labeled including the jewel of the south Saint Denis. You do know I live in the city it was inspired by… New Orleans? Yes, I do. Naturally that makes me love this game even more. Let’s label it. Add a new layer, select “place_label” from “Mapbox Streets v7” as your data source, and then change your layer “Type” to “Symbol.” This should light up all sorts of cities on your map. Let’s filter down by major cities only. Click “Filter” and add a filter for type, adding values for both “town” and “city.” Let’s another filter for “localrank” and set the value to 1. This will greatly decrease the label density, leaving only major cities. Once you’ve done this jump over to styling and don’t panic if you don’t see a label. “Text field” should be preselected and we’ll need to tell Studio that we wish to use the “name” property from our data sources as the text on the label. In order to do this, click the little icon under “Insert a data field” and choose name. You should then see the names show up. Let’s style them.
+
+First, set the color to Ink like our previous labels and then select “Raleway Black” as your typeface. Click the “Transform” function and choose Uppercase as the transform. Then set your letter spacing to 0.2em, giving it a bit more spacing like in the game. In general, this works pretty well but we’ll want to add some zoom styling for the text size to make it perform a bit more like the game map. Click “Size” and add the following:
+
+Zoom 8, line width: 8px
+Zoom 22, line width:144px
+Exponential change, base: 1.2
+That should do nicely. Rename your layer “City Name” and let’s move on.
+
+Viewpoints
+
+By far my favorite typeface on the map, may not actually be a typeface at all. It seems like RDR2 had someone hand write some of the more interesting viewpoints and locations on the map. Luckily Google Font had a typeface called Homemade Apple which comes very close to emulating the effect. Search “Ferguson Point” using the “Search places” box and we’ll work on adding a label for it. Create a new layer and choose “poi_label” from “Mapbox Streets v7” as your data source. Let’s make this layer the “Type” of “Symbol” as well. The poi data source of Mapbox is incredibly rich with data and we’ll be putting this to good use in the Iconography section later. For now, let’s “Filter” the data by the type of “viewpoint.” This should highlight Ferguson Point in Stanley Park. Let’s style it.
+
+Again, let’s make sure the “Text field” is using the data source’s name field. Instead of Ink, we’ll change the color of this label to the Pencil color we defined earlier. Let’s then change the typeface to “Homemade Apple.” Very nice. Now, I noticed on the map that a lot of the labels tend to be on two lines so let’s reduce the “Max width” to 5em in order to simulate this. Now we simply need to add some zoom styling once again for the text size. Here’s what works:
+
+Zoom 8, line width: 8px
+Zoom 22, line width: 72px
+Exponential change, base: 1.2
+That’s probably my favorite layer of the map. Let’s name it “Viewpoints” and work on some mountain peaks.
+
+Natural Features
+
+The game map labels a bunch of natural features like Tempest Rim, Window Rock, and the Three Sisters in an all caps italic typeface. We can add a similar set of labels to our map by styling the mountain peak labels data source from Mapbox Studio. Add a new layer and choose “mountain_peak_label” from “Mapbox Street v7,” making sure the layer “Type” is set to “Symbol” once again. This layer by default will label anything from a peak to a hill so let’s add a “Filter” of “elevation_ft” and set it to “greater than” “10000.”
+
+Search “Pikes Peak” to reposition the map near that particular peak. We’ll style this one in a similar manner, setting the “Text field” to “name,” changing the color to Ink, and transforming the text to uppercase. We’ll once again change the word spacing to 5em in order to force the name to fall one 2 or more lines. (Pike’s Peak is small enough to stay on one line.) Finally, we can add some zoom styling for the text size. Since it is close to the same size as viewpoints, we can reuse the styling from that label. Click “Size” and choose “Apply existing value” and then select the “Viewpoints” text sizing from the list. Nice work. Rename this layer “Natural Features” and we’ll move onto some Forts.
+
+Forts
+
+Forts are a common place for adventure in the RDR series and their prominence in the story is made apparent by their permanent labeling on the game map. Let’s make sure to label the forts (and castles) on our map as well. Create a new layer and choose “poi_label” from “Mapbox Streets v7,” making sure the layer “Type” is set to “Symbol.” We’ll then “Filter” the data by type of “fort” and “castle.” Search for “Fort Independence” and jump over to styling. Set the “Text field” to “name,” change the color to Ink, transform the type to uppercase, set the max width to 5em, and adjust the letter spacing to 0.1em. You can then change the typeface to “Lato Black.” Once again, you can use the same zoom styling for size as “Natural Features” and “Viewpoints” by simply clicking “Size” and choosing “Apply existing value.” Rename this layer “Forts” and we’ll add some train stations next.
+
+Stations
+
+In addition to adding a circle for each railway station, the game map chooses to label some of the stations that appear outside of town. For the sake of our map, let’s go ahead and add similar labels to the major rail stations on our map. Add a new layer and choose “rail_station_label” from “Mapbox Streets v7,” making sure the layer “Type” is set to “Symbol.” Then create a “Filter” to make sure the “network” is “rail.” “Whistler” is once again a good location to jump to because it has a station right on the line. Let’s search for that location and then jump to styling. You know the drill: set the “Text field” to name, color to Ink, transform to uppercase, and max width to 5em. We’re also going to set the “Letter spacing” to be 0.2em and the font to be “Raleway Black” like the city names. We can once again reuse the same size styling from “Natural Features.” Nice.
+
+Now the name of the station should appear right on top the line. However, on the game map, the label for Bacchus Station and Benedict Point station is actually positioned off to the side. We can create a similar layout by adjusting the symbol position. Click the “Position” tab to jump to this function. First, let’s set the “Text anchor” to be “Left” so that the label is anchored, you guessed it, to the left. Now there is probably still a bit of overlap between “Whistler” and the donut station, we’ll need to offset the text slightly to the right in order to remedy this. This will work best as a simple zoom styling. We’ll keep the rate of change to linear this time and setup the following stops:
+
+Zoom 12, x: 0em, y: 0em
+Zoom 22, x: 2em, y; 0em
+Nice, the label should now be positioned slightly to the right. Rename this layer “Stations” and we’ll start taking a look at water labels.
+
+Major Water Body
+
+The largest body of water on the game map is Flat Iron Lake, followed by the San Luis and Lannahechee rivers. These are very simply styled as large labels. Water is rather tricky to style simply because it comes in all shapes and sizes. However, Mapbox will actually allow us to filter by the area of water to distinguish between large and small water sources. Let’s give that a whirl. “Mille Lacs Lake” is a hefty lake in Minnesota so let’s search for that one to position our map. Zoom out to make sure the whole lake is in view. Then create a new layer and choose “water_label” from “Mapbox Streets v7” as our data source. Once again, set the layer “Type” to “Symbol.” If you click on the Mille Lacs Lake feature on the blueprint map, you’ll see that the lake has an area of 1082656512. Let’s use that number as a starting point to distinguish large bodies of water. Simple add a “Filter” for “area” that is “greater than or equal to” 1000000000. With that filter setup, let’s get into styling.
+
+Once again, set your “Text field” to use the data’s name, adjust the color to Ink, and transform the text to uppercase. We’ll also want to set the letter spacing to 1em and adjust the “Line height” property to be 2em. You can then change the font to “Noto Serif Bold Italic.” You can then apply the same styling for “Size” as the “City Name” layer. Go ahead and rename that layer “Major Water Body” and we’ll work on minor water bodies next.
+
+Minor Water Body
+
+For all smaller water bodies (but not too small) we’re going to apply a different label treatment. This is found on the game map in the form of ponds, pools, lagoons, and smaller lakes. Let’s start by duplicating the “Major Water Body” label you just created and renaming it “Minor Water Body.” Then jump back to your data source by clicking “Select Data.” From here we’ll adjust the “Filter” to areas of water “less than” 1000000000 and also “greater than” 10000. (I noticed a couple of fountains gaining this distinction when not adding this threshold.) You may adjust as needed. Now search the map for a smaller lake you’re familiar with and open up the style tab.
+
+Since the style is still that of a “Major Water Body,” let’s adjust it. First, change the font to “Crimson Text Bold Italic.” Reset the text transform back to “None” so that it is no longer in all caps. Bring the letter spacing down to 0.1em and the line height down to 0.9em, making the text much more snug. You should also change the max width to 5em. Finally, let’s apply the same “Size” styling as our Forts and Stations. It’s now time to look at rivers!
+
+Rivers
+
+RDR2 will have you fording plenty of rivers from the Kamassa to the Dakota. These are set in the same type and sizing as minor water bodies. What’s unique about their labeling is how it follows the shape of the actual river. Mapbox Studio, once again, has a distinction for this type of label: Waterway Label. Let’s add this layer to label our map’s rivers as well. Create a new layer and choose “waterway_label” from “Mapbox Streets v7” as your data source and again set the layer type to “Symbol.” Let’s go ahead and then “Filter” the data by the “class” of “river” so we’re not styling any canals or streams in this manner. You can then jump over to styling.
+
+This should now be second nature to you but let’s it anyway: adjust the “Text field” property so it uses the data’s name field, set the color to Ink, change the font to “Crimson Text Bold Italic,” and the letter spacing to 0.1em. You can then give it the same “Size” styling as the “Minor Water Bodies.” Sweet, now let’s make it follow the curvature of the river. Click the “Placement” tab and choose “Line center” as the “Placement” instead of circle. Your labels should now follow the line of the river. Good work! Let’s rename this layer “Rivers.”
+
+Before we move on, let’s group all of our typography layers in a new group called “Typography.”
+
+Icons
+
+The game map uses many icons and markers to help you navigate. For the sake of our map, we’ll be focused on emulating the permanent place icons you can find in each town such as Saloons and Butchers. Adding an Icon to your Mapbox map is similar to adding a text label. It starts with picking the appropriate data source, making sure the layer is of type “Symbol,” and filtering down to the appropriate category. Make sure you have your icon images we created earlier uploaded to Studio and let’s quickly add them to our map.
+
+First Icon
+We’ll start by creating an icon for Post Offices. It’s here you can mail in your legendary fish, read letters from love ones, and get hot tips about possible stagecoach robberies. Start by adding a new layer to your map and choosing “poi_label” from the “Mapbox Streets v7” data source. Make sure your layer “Type” is set to “Symbol.” Then add a “Filter” of “type” and filter it by the value of “Post Office.” Make sure your map is positioned near a Post Office and let’s jump to Style once again.
+
+Woah, wait. Before you start adding “name” as your “Text field…” Don’t. You don’t need to anymore. Instead, click on the “Icon” tab as that’s where we’ll be spending our time. From here, simply clicking the mail icon to establish it as your symbol’s icon. I would then set the size to 2. That’s it! Rename the layer “Post Offices” and let’s create the others.
+
+Other Icons
+For each other icon, you simply need to start by duplicating the “Post Office” and then changing the data source filter to reflect your new category. Finally, make sure to change the icon to reflect the new category and rename the layer accordingly. Reference the category list from preparation section to make this easier. Once you get all of these icons added to your map, group all of the layers in a new group called Iconography.
+
+Texture
+
+Our map, thus far, has been composed of solid colors but a closer look at the game map reveals a subtle texture. We can add this easily to our map by creating a new background layer, giving it a pattern, and moving it to the top of our layer stack. Mapbox Studio expects an SVG vector texture so I designed a very simple grain texture in Illustrator and followed Mapbox’s instructions on putting it on the right format. Go ahead and download the texture I created here and upload it to your map images. Once you’ve done that, add a new layer and instead of adding a data source, choose “Background layer” and click “Create background layer.” This will cause your map to black out but we can fix this by simply adjusting the “Pattern.” Click it and choose your texture from the images. Then adjust the layer opacity down to 0.01. Nice work!
+
+Game Over?
+Not quite. If you made it this far, congratulate yourself. You now have an incredible map which you can use to start blurring the lines between your game life and the real world. There are plenty of elements and features to the game map that I’ve left out which you should try to tackle. Here’s a few additional achievements you can unlock:
+
+Drawing an illustration of a fish, uploading it as a map icon, and adding it to your favorite lake as a legendary fish location
+Adding yourself as a main quest icon. (Homemade Apple works great for this)
+Importing your newly created map into Mapbox GL JS to recreate the game’s compass
+Using the Mapbox Directions API to build red line routing
+Importing a geojson of your state or county’s boundaries and styling it to make yourself Wanted in that area
+I just want to thank Rockstar Games for the inspiration. You really are building worlds there. Finally, thanks to Mapbox for supporting this adventure and building the tools that make it possible.
+
+Thank you for coming along on this cattle drive.
