@@ -16,7 +16,10 @@ dependencies = [
     "langchain-ollama (>=0.2.3,<0.3.0)",
     "langchain-pinecone (>=0.2.3,<0.3.0)",
     "isort (>=6.0.0,<7.0.0)",
-    "langgraph (>=0.2.73,<0.3.0)"
+    "langgraph (>=0.2.73,<0.3.0)",
+    "bs4 (>=0.0.2,<0.0.3)",
+    "chromadb (>=0.6.3,<0.7.0)",
+    "langchain-chroma (>=0.2.2,<0.3.0)"
 ]
 
 [tool.poetry]

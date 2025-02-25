@@ -67,8 +67,8 @@ Final Answer: the final answer to the original input question
 
 Begin!
 
-Question: {input}
-Thought: {agent_scratchpad}
+Question: 
+Thought: {agent_scratchpad}{input}
 """
 
 prompt = (
@@ -84,13 +84,13 @@ prompt = (
 # LLM Setup
 ###############################################################################
 # You can swap in ChatOpenAI if desired:
-# llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", stop=["\nObservation"])
-llm = ChatOllama(
-    temperature=0,
-    model="llama3.2",
-    stop=["\nObservation", "Observation"],
-    callbacks=[AgentCallbackHandler()],
-)
+llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", stop=["\nObservation"])
+# llm = ChatOllama(
+#     temperature=0,
+#     model="llama3.2",
+#     stop=["\nObservation", "Observation"],
+#     callbacks=[AgentCallbackHandler()],
+# )
 
 ###############################################################################
 # Construct the chain that uses ReActSingleInputOutputParser
